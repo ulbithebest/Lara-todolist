@@ -32,12 +32,14 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <form action="{{ route('tasks.index') }}" method="GET">
-                    <div class="input-group shadow-sm">
-                        <input type="text" class="form-control border-end-0" name="search" placeholder="Cari tugas..."
-                            value="{{ request('search') }}">
-                        <button class="btn btn-outline-secondary border-start-0" type="submit">
-                            <i class="fas fa-search text-muted"></i>
+                <form action="{{ route('tasks.index') }}" method="GET" class="position-relative">
+                    <div class="input-group shadow-gray-50 inline">
+                        <input type="text" class="form-control border-end-0 pe-0" name="search"
+                            placeholder="Cari tugas..." value="{{ request('search') }}" id="searchInput">
+                     
+                        <button type="submit" class="btn btn-secondary border-0 "
+                            id="clearSearchBtn">
+                            <i class="fas fa-search"></i>
                         </button>
                     </div>
                 </form>
@@ -53,99 +55,103 @@
         <!-- Task List Card -->
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white py-3">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link {{ !request('status') ? 'active' : '' }}" href="{{ route('tasks.index') }}">
-                            <i class="fas fa-list me-1"></i> Semua
-                            <span class="badge rounded-pill bg-secondary ms-1">{{ $tasks->count() }}</span>
+                <ul class="nav nav-tabs card-header-tabs d-flex justify-content-between">
+                    <li class="nav-item flex-grow-1 text-center">
+                        <a class="nav-link d-flex align-items-center justify-content-center {{ !request('status') ? 'active' : '' }}"
+                            href="{{ route('tasks.index') }}" style="min-width: 100px;">
+                            <i class="fas fa-list me-2"></i>
+                            Semua
+                            <span class="badge rounded-pill bg-secondary ms-2">{{ $tasks->count() }}</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('status') === 'tertunda' ? 'active' : '' }}"
-                            href="{{ route('tasks.index', ['status' => 'tertunda']) }}">
-                            <i class="fas fa-clock me-1"></i> Aktif
+                    <li class="nav-item flex-grow-1 text-center">
+                        <a class="nav-link d-flex align-items-center justify-content-center {{ request('status') === 'tertunda' ? 'active' : '' }}"
+                            href="{{ route('tasks.index', ['status' => 'tertunda']) }}" style="min-width: 100px;">
+                            <i class="fas fa-clock me-2"></i>
+                            Aktif
                             <span
-                                class="badge rounded-pill bg-primary ms-1">{{ $tasks->where('status', 'tertunda')->count() }}</span>
+                                class="badge rounded-pill bg-primary ms-2">{{ $tasks->where('status', 'tertunda')->count() }}</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request('status') === 'selesai' ? 'active' : '' }}"
-                            href="{{ route('tasks.index', ['status' => 'selesai']) }}">
-                            <i class="fas fa-check-circle me-1"></i> Selesai
+                    <li class="nav-item flex-grow-1 text-center">
+                        <a class="nav-link d-flex align-items-center justify-content-center {{ request('status') === 'selesai' ? 'active' : '' }}"
+                            href="{{ route('tasks.index', ['status' => 'selesai']) }}" style="min-width: 100px;">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Selesai
                             <span
-                                class="badge rounded-pill bg-success ms-1">{{ $tasks->where('status', 'selesai')->count() }}</span>
+                                class="badge rounded-pill bg-success ms-2">{{ $tasks->where('status', 'selesai')->count() }}</span>
                         </a>
                     </li>
                 </ul>
             </div>
+        </div>
 
-            <div class="card-body p-0">
-                @if ($tasks->isEmpty())
-                    <div class="text-center py-5">
-                        <div class="py-3">
-                            <i class="fas fa-tasks fa-4x text-muted mb-3"></i>
-                            <h4 class="text-gray-900">Belum Ada Tugas</h4>
-                            <p class="text-muted mb-0">Mulai dengan menambahkan tugas baru</p>
-                        </div>
+        <div class="card-body p-0">
+            @if ($tasks->isEmpty())
+                <div class="text-center py-5 bg-white">
+                    <div class="py-3">
+                        <i class="fas fa-tasks fa-4x text-muted mb-3"></i>
+                        <h4 class="text-gray-900">Belum Ada Tugas</h4>
+                        <p class="text-muted mb-0">Mulai dengan menambahkan tugas baru</p>
                     </div>
-                @else
-                    <div class="list-group list-group-flush">
-                        @foreach ($tasks as $task)
-                            <div class="list-group-item p-3 {{ $task->status == 'selesai' ? 'bg-light' : '' }}">
-                                <div class="row align-items-center g-3">
-                                    <div class="col-auto">
-                                        <form action="{{ route('tasks.toggle', $task->id) }}" method="POST">
-                                            @csrf
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input shadow-none"
-                                                    onchange="this.form.submit()"
-                                                    {{ $task->status == 'selesai' ? 'checked' : '' }}>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col">
-                                        <h6
-                                            class="mb-1 {{ $task->status == 'selesai' ? 'text-decoration-line-through text-muted' : 'text-gray-900' }}">
-                                            {{ $task->judul }}
-                                        </h6>
-                                        @if ($task->deskripsi)
-                                            <p class="text-muted small mb-1">{{ Str::limit($task->deskripsi, 100) }}</p>
-                                        @endif
-                                        <div class="d-flex align-items-center gap-2">
-                                            @if ($task->deadline)
-                                                <span
-                                                    class="badge {{ strtotime($task->deadline) < time() ? 'bg-danger' : 'bg-info' }}">
-                                                    <i class="far fa-calendar-alt me-1"></i>
-                                                    {{ $task->deadline->format('d M Y') }}
-                                                </span>
-                                            @endif
+                </div>
+            @else
+                <div class="list-group list-group-flush">
+                    @foreach ($tasks as $task)
+                        <div class="list-group-item p-3 {{ $task->status == 'selesai' ? 'bg-light' : '' }}">
+                            <div class="row align-items-center g-3">
+                                <div class="col-auto">
+                                    <form action="{{ route('tasks.toggle', $task->id) }}" method="POST">
+                                        @csrf
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input shadow-none"
+                                                onchange="this.form.submit()"
+                                                {{ $task->status == 'selesai' ? 'checked' : '' }}>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col">
+                                    <h6
+                                        class="mb-1 {{ $task->status == 'selesai' ? 'text-decoration-line-through text-muted' : 'text-gray-900' }}">
+                                        {{ $task->judul }}
+                                    </h6>
+                                    @if ($task->deskripsi)
+                                        <p class="text-muted small mb-1">{{ Str::limit($task->deskripsi, 100) }}</p>
+                                    @endif
+                                    <div class="d-flex align-items-center gap-2">
+                                        @if ($task->deadline)
                                             <span
-                                                class="badge {{ $task->status == 'selesai' ? 'bg-success' : 'bg-warning' }}">
-                                                <i
-                                                    class="fas fa-{{ $task->status == 'selesai' ? 'check' : 'clock' }} me-1"></i>
-                                                {{ ucfirst($task->status) }}
+                                                class="badge {{ strtotime($task->deadline) < time() ? 'bg-danger' : 'bg-info' }}">
+                                                <i class="far fa-calendar-alt me-1"></i>
+                                                {{ $task->deadline->format('d M Y') }}
                                             </span>
-                                        </div>
+                                        @endif
+                                        <span class="badge {{ $task->status == 'selesai' ? 'bg-success' : 'bg-warning' }}">
+                                            <i
+                                                class="fas fa-{{ $task->status == 'selesai' ? 'check' : 'clock' }} me-1"></i>
+                                            {{ ucfirst($task->status) }}
+                                        </span>
                                     </div>
-                                    <div class="col-auto">
-                                        <div class="btn-group">
-                                            <button class="btn btn-light btn-sm border shadow-none" data-bs-toggle="modal"
-                                                data-bs-target="#editTaskModal{{ $task->id }}" title="Edit">
-                                                <i class="fas fa-edit text-primary"></i>
-                                            </button>
-                                            <button class="btn btn-light btn-sm border shadow-none" data-bs-toggle="modal"
-                                                data-bs-target="#deleteTaskModal{{ $task->id }}" title="Hapus">
-                                                <i class="fas fa-trash-alt text-danger"></i>
-                                            </button>
-                                        </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="btn-group">
+                                        <button class="btn btn-light btn-sm border shadow-none" data-bs-toggle="modal"
+                                            data-bs-target="#editTaskModal{{ $task->id }}" title="Edit">
+                                            <i class="fas fa-edit text-primary"></i>
+                                        </button>
+                                        <button class="btn btn-light btn-sm border shadow-none" data-bs-toggle="modal"
+                                            data-bs-target="#deleteTaskModal{{ $task->id }}" title="Hapus">
+                                            <i class="fas fa-trash-alt text-danger"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
+    </div>
     </div>
 
     <!-- Add Task Modal -->

@@ -29,22 +29,17 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--purple-lightest);
             padding-top: 75px;
-    
         }
 
         .navbar {
-            background-color: rgba(107, 70, 193, 0.1);
+            background-color: rgba(107, 70, 193, 0.3);
             transition: background 0.3s ease;
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 1200px;
-            border-radius: 16px;
+            top: 0;
+            left: 0;
+            width: 100%;
             box-shadow: 0 10px 25px rgba(107, 70, 193, 0.1);
             z-index: 1000;
-            padding: 10px 15px;
         }
 
         .navbar-brand {
@@ -139,6 +134,7 @@
             border-radius: 1rem;
         }
 
+        
         .search-input {
             background-color: var(--purple-dark);
             border: none;
@@ -155,6 +151,9 @@
             color: white;
             box-shadow: 0 0 0 2px var(--purple-light);
         }
+        .fa-seach{
+            color: var(--purple-lighter);
+        }
 
         .dropdown-menu {
             border-radius: 0.75rem;
@@ -170,35 +169,55 @@
         }
 
         @media (max-width: 768px) {
+
+          
             .navbar {
-                width: calc(100% - 20px);
-                top: 10px;
+                width: 100%;
             }
 
+         
             .container {
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
 
+           
             .card {
-                border-radius: 0.75rem;
+                /* border-radius: 0.75rem; */
+                /* margin-left: -0.5rem;
+                margin-right: -0.5rem; */
+                /* width: calc(100% + 1rem); */
             }
 
+           
             .btn-group {
                 display: flex;
                 gap: 0.5rem;
             }
 
+            
             .nav-tabs {
                 overflow-x: auto;
                 flex-wrap: nowrap;
                 scrollbar-width: none;
+                width: 100%;
+                padding: 0 0.25rem;
             }
 
             .nav-tabs::-webkit-scrollbar {
                 display: none;
             }
 
+            .nav-tabs .nav-item {
+                flex-shrink: 0;
+            }
+
+            .nav-tabs .nav-link {
+                white-space: nowrap;
+                padding: 0.5rem 0.75rem;
+            }
+
+          
             .navbar-profile {
                 margin-left: auto;
             }
@@ -218,6 +237,23 @@
                 color: var(--purple-light);
             }
         }
+
+       
+        @media (max-width: 480px) {
+            .nav-tabs .nav-link {
+                font-size: 0.875rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .nav-tabs .nav-link i {
+                margin-right: 0.25rem;
+            }
+
+            .badge {
+                font-size: 0.675rem;
+                padding: 0.2rem 0.4rem;
+            }
+        }
     </style>
 </head>
 
@@ -225,7 +261,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand " href="#">To-Do-List</a>
+                <a class="navbar-brand ms-2" href="#">To-Do-List</a>
                 <div class="navbar-profile dropdown ms-auto">
                     <div class="d-flex align-items-center gap-3" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
