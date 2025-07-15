@@ -86,14 +86,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
             color: white;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-        }
-
-        .profile-avatar:hover {
-            transform: scale(1.05);
         }
 
         .btn-primary {
@@ -109,11 +102,6 @@
         .nav-tabs .nav-link.active {
             color: var(--purple-primary);
             border-color: var(--purple-primary);
-            border-bottom: 2px solid var(--purple-primary);
-        }
-
-        .nav-tabs .nav-link {
-            color: #6B7280;
         }
 
         .form-check-input:checked {
@@ -121,20 +109,11 @@
             border-color: var(--purple-primary);
         }
 
-        .alert {
-            border-radius: 0.75rem;
-        }
-
         .card {
             border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .modal-content {
-            border-radius: 1rem;
-        }
-
-        
         .search-input {
             background-color: var(--purple-dark);
             border: none;
@@ -142,147 +121,41 @@
             border-radius: 0.75rem;
         }
 
-        .search-input::placeholder {
-            color: var(--purple-lighter);
-        }
-
-        .search-input:focus {
-            background-color: var(--purple-dark);
-            color: white;
-            box-shadow: 0 0 0 2px var(--purple-light);
-        }
-        .fa-seach{
-            color: var(--purple-lighter);
-        }
-
-        .dropdown-menu {
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .dropdown-item:hover {
-            background-color: var(--purple-lightest);
-        }
-
-        .icon {
-            color: var(--purple-primary);
-        }
-
         @media (max-width: 768px) {
-
-          
-            .navbar {
-                width: 100%;
-            }
-
-         
             .container {
                 padding-left: 1rem;
                 padding-right: 1rem;
             }
-
-           
-            .card {
-                /* border-radius: 0.75rem; */
-                /* margin-left: -0.5rem;
-                margin-right: -0.5rem; */
-                /* width: calc(100% + 1rem); */
-            }
-
-           
-            .btn-group {
-                display: flex;
-                gap: 0.5rem;
-            }
-
             
             .nav-tabs {
                 overflow-x: auto;
                 flex-wrap: nowrap;
                 scrollbar-width: none;
                 width: 100%;
-                padding: 0 0.25rem;
-            }
-
-            .nav-tabs::-webkit-scrollbar {
-                display: none;
-            }
-
-            .nav-tabs .nav-item {
-                flex-shrink: 0;
-            }
-
-            .nav-tabs .nav-link {
-                white-space: nowrap;
-                padding: 0.5rem 0.75rem;
-            }
-
-          
-            .navbar-profile {
-                margin-left: auto;
             }
 
             .profile-info {
                 display: none;
             }
-
-            .profile-avatar i {
-                font-size: 1.2rem;
-                transition: transform 0.2s ease, color 0.2s ease;
-                color: white;
-            }
-
-            .profile-avatar:hover i {
-                transform: scale(1.1);
-                color: var(--purple-light);
-            }
-        }
-
-       
-        @media (max-width: 480px) {
-            .nav-tabs .nav-link {
-                font-size: 0.875rem;
-                padding: 0.4rem 0.6rem;
-            }
-
-            .nav-tabs .nav-link i {
-                margin-right: 0.25rem;
-            }
-
-            .badge {
-                font-size: 0.675rem;
-                padding: 0.2rem 0.4rem;
-            }
         }
     </style>
 </head>
-
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand ms-2" href="#">To-Do-List</a>
                 <div class="navbar-profile dropdown ms-auto">
-                    <div class="d-flex align-items-center gap-3" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <div class="profile-info d-none d-md-block opacity-30">
+                    <div class="d-flex align-items-center gap-3" role="button" data-bs-toggle="dropdown">
+                        <div class="profile-info d-none d-md-block">
                             <div class="profile-name">{{ Auth::user()->name }}</div>
                             <div class="profile-email">{{ Auth::user()->email }}</div>
                         </div>
                         <div class="profile-avatar">
-                            <i class="fas fa-user"></i> <!-- Ikon user -->
+                            <i class="fas fa-user"></i>
                         </div>
                     </div>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <div class="dropdown-item-text d-md-none">
-                                <div class="fw-bold">{{ Auth::user()->name }}</div>
-                                <div class="small text-muted">{{ Auth::user()->email }}</div>
-                            </div>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider d-md-none">
-                        </li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
@@ -296,30 +169,13 @@
             </div>
         </nav>
     </div>
+    
     <div>
         @yield('content')
     </div>
-    </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Form validation
-        (() => {
-            'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
-
-        // Search functionality
         document.getElementById('searchTask')?.addEventListener('keyup', function(e) {
             const searchText = e.target.value.toLowerCase();
             const tasks = document.querySelectorAll('.list-group-item');
@@ -329,7 +185,6 @@
             });
         });
 
-        // Task filtering
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 if (this.dataset.filter) {
@@ -342,15 +197,11 @@
 
                     tasks.forEach(task => {
                         const isCompleted = task.querySelector('.form-check-input').checked;
-                        if (filter === 'all') {
-                            task.style.display = '';
-                        } else if (filter === 'active' && !isCompleted) {
-                            task.style.display = '';
-                        } else if (filter === 'completed' && isCompleted) {
-                            task.style.display = '';
-                        } else {
-                            task.style.display = 'none';
-                        }
+                        task.style.display = 
+                            filter === 'all' || 
+                            (filter === 'active' && !isCompleted) || 
+                            (filter === 'completed' && isCompleted) 
+                                ? '' : 'none';
                     });
                 }
             });
@@ -358,5 +209,4 @@
     </script>
     @stack('scripts')
 </body>
-
 </html>
